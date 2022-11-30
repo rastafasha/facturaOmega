@@ -1,0 +1,2 @@
+export { TemplateFormTarifaComponent } from './template-form-tarifa/template-form-tarifa.component';
+export { TemplatePanelTarifasComponent } from './template-panel-tarifas/template-panel-tarifas.component';

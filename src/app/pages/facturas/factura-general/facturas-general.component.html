@@ -1,0 +1,144 @@
+<h1>Facturas</h1>
+
+<div class="cchs-button-toolbar">
+  <button mat-raised-button
+          color="primary"
+          routerLink="/{{ sesion.path }}/factura">
+          <mat-icon>add</mat-icon>
+          Nueva factura
+  </button>
+  <button mat-raised-button
+          [disabled]="loading"
+          color="secondary"
+          (click)="descargarTodas()">
+          <mat-icon>download</mat-icon>
+          {{ segundosEspera >= 1 ? (segundosEspera + ' segundo(s)') : 'Descargar facturas' }}
+  </button>
+</div>
+
+<!-- Barra de carga -->
+<mat-progress-bar mode="indeterminate"
+                  *ngIf="loading">
+</mat-progress-bar>
+
+<!-- Lista movil -->
+<div class="cchs-lista">
+  <mat-card class="mb-2" *ngFor="let factura of dataSource.data">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{ factura.series }}{{ factura.folio_number }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        <b>Creada el: </b> {{ factura.created_at | date: 'dd/MM/yyyy' }} <br>
+        <b>RFC: </b> {{ factura.clave }} <br>
+        <b>Monto: </b> {{ factura.total | currency }} <br>
+        <b>Status: </b>
+        <mat-chip-list class="mat-chip-list-stacked" aria-label="Color selection">
+          <mat-chip selected [color]="getStatusColor(factura)">
+            {{ factura | statusFactura }}
+          </mat-chip>
+        </mat-chip-list>
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-menu-item (click)="descargar(factura, 'pdf')">
+        <mat-icon>picture_as_pdf</mat-icon>
+        <span>Descargar PDF</span>
+      </button>
+      <button mat-menu-item (click)="descargar(factura, 'xml')">
+        <mat-icon>insert_drive_file</mat-icon>
+        <span>Descargar XML</span>
+      </button>
+      <button mat-menu-item (click)="descargar(factura, 'zip')">
+        <mat-icon>folder</mat-icon>
+        <span>Descargar Zip</span>
+      </button>
+      <button mat-menu-item (click)="cancelar(factura)" *ngIf="factura.series == 'CAS-'">
+        <mat-icon>cancel</mat-icon>
+        <span>Cancelar factura</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  <app-paginador-movil (onChange)="cambiarPaginaMovil($event)"
+                      [pagina]="paginator ? paginator.pageIndex : 0"
+                      [totalRegistros]="totalRegistros"
+                      [totalPorPagina]="totalPagina"
+                      [disabled]="loading">
+  </app-paginador-movil>
+</div>
+
+<!-- Tabla -->
+<div class="mat-elevation-z8 cchs-table">
+  <mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="clave">
+      <mat-header-cell *matHeaderCellDef>Receptor</mat-header-cell>
+      <mat-cell *matCellDef="let factura">{{ factura.clave }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha_creacion">
+      <mat-header-cell *matHeaderCellDef>Fecha de creación</mat-header-cell>
+      <mat-cell *matCellDef="let factura">{{ factura.created_at | date: 'dd/MM/yyyy' }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="folio">
+      <mat-header-cell *matHeaderCellDef>Folio</mat-header-cell>
+      <mat-cell *matCellDef="let factura">{{ factura.series }}{{ factura.folio_number }}</mat-cell>
+    </ng-container>
+
+     <ng-container matColumnDef="monto">
+      <mat-header-cell *matHeaderCellDef>Monto</mat-header-cell>
+      <mat-cell *matCellDef="let factura"> {{ factura.total | currency }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+      <mat-cell *matCellDef="let factura">
+        <mat-chip-list class="mat-chip-list-stacked" aria-label="Color selection">
+          <mat-chip selected [color]="getStatusColor(factura)">
+            {{ factura | statusFactura }}
+          </mat-chip>
+        </mat-chip-list>
+
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let factura">
+        <ng-container *ngIf="(factura | statusFactura) === 'Aprobada'">
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="descargar(factura, 'pdf')">
+              <mat-icon>picture_as_pdf</mat-icon>
+              <span>Descargar PDF</span>
+            </button>
+            <button mat-menu-item (click)="descargar(factura, 'xml')">
+              <mat-icon>insert_drive_file</mat-icon>
+              <span>Descargar XML</span>
+            </button>
+            <button mat-menu-item (click)="descargar(factura, 'zip')">
+              <mat-icon>folder</mat-icon>
+              <span>Descargar Zip</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="cancelar(factura)" *ngIf="factura.series == 'CAS-'">
+              <mat-icon>cancel</mat-icon>
+              <span>Cancelar factura</span>
+            </button>
+          </mat-menu>
+        </ng-container>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+  </mat-table>
+  <mat-paginator  [length]="totalRegistros"
+                  [pageSize]="totalPagina"
+                  [disabled]="loading">
+  </mat-paginator>
+</div>

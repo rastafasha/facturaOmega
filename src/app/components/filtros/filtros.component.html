@@ -1,0 +1,100 @@
+
+<form [formGroup]="formFilters" (ngSubmit)="submit()" class="p-3">      
+  <h5>{{ title }}</h5>
+  <ng-container *ngFor="let filter of fieldFilters; let i = index">
+              
+    <!-- type texto -->
+    <mat-form-field *ngIf="filter.type == TEXTO" appearance="fill" class="cchs-input-filter">          
+      <mat-label>{{ filter.label }}</mat-label>            
+      <input  matInput
+              [id]="filter.name"
+              [formControlName]="filter.name"
+              autocomplete="off"
+              type="text"
+              (keyup)="onKey()"
+              placeholder="{{ filter.label }}">          
+    </mat-form-field>
+        
+    <!-- type numero -->
+    <mat-form-field *ngIf="filter.type == NUMERO" appearance="fill" class="cchs-input-filter">
+      <mat-label>{{ filter.label }}</mat-label>
+      <input  matInput
+              [id]="filter.name"
+              [formControlName]="filter.name"
+              (keyup)="onKey()"
+              autocomplete="off"
+              type="number"
+              placeholder="{{ filter.label }}">                
+    </mat-form-field>
+        
+    <!-- type fecha -->
+    <mat-form-field *ngIf="filter.type == FECHA" appearance="fill" class="cchs-input-filter">
+      <mat-label>{{ filter.label }}   </mat-label>
+      <input  matInput
+              [id]="filter.name"  
+              [formControlName]="filter.name"
+              [matDatepicker]="picker"
+              (dateInput)="dateSelected()"
+              (dateChange)="dateSelected()"
+              placeholder="{{ filter.label }}"
+              autocomplete="off">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>              
+    </mat-form-field>
+        
+    <!-- type Checkbox -->         
+    <mat-checkbox *ngIf="filter.type == CHECKBOX"
+                  [id]="filter.name"
+                  (change)="checked()"                      
+                  [formControlName]="filter.name">
+                  {{ filter.label }}                
+    </mat-checkbox>
+            
+    <!-- type lista desplegable -->
+    <mat-form-field *ngIf="filter.type == LISTA_DESPLEGABLE" appearance="fill" class="cchs-input-filter">
+      <mat-label>{{ filter.label }}  </mat-label>
+      <mat-select (selectionChange)="selected()"
+                  [id]="filter.name"
+                  [formControlName]="filter.name">
+                  <mat-option [value]="NULL" *ngIf="filter.isEmpty">[Todos]</mat-option>
+                  <mat-option *ngFor="let data of filter.data"
+                              [value]="data.id">
+                              {{ data.value }}
+                  </mat-option>
+      </mat-select>
+    </mat-form-field>
+            
+    <!-- type lista seleccion multiple -->
+    <mat-form-field *ngIf="filter.type == LISTA_SELECCION_MULTIPLE" appearance="fill" class="cchs-input-filter">
+      <mat-label>{{ filter.label }}</mat-label>
+      <mat-select multiple
+                  [id]="filter.name"
+                  (selectionChange)="selected()"
+                  [formControlName]="filter.name">
+                  <mat-option *ngFor="let data of filter.data"
+                              [value]="data.id">
+                              {{ data.value }}
+                  </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <br>
+  </ng-container>
+          
+  <button mat-raised-button
+          *ngIf="!whenValuesChange"
+          type="submit"
+          color="primary">
+          <mat-icon>filter_list</mat-icon>
+         Filtrar
+  </button>
+            
+  <button mat-button
+          *ngIf="showClearFilters"
+          (click)="formFilters.reset()"
+          type="button">
+          <mat-icon>delete</mat-icon>
+          Limpiar
+  </button>
+  
+</form>

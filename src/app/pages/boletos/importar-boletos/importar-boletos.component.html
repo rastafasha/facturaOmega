@@ -1,0 +1,80 @@
+
+<mat-progress-bar mode="indeterminate"
+                  *ngIf="loading">
+</mat-progress-bar>
+
+<div class="mat-elevation-z8">
+  <mat-horizontal-stepper linear #stepper>
+      <!-- Barra de carga -->
+      <!-- Seleccion del archivo -->
+      <mat-step>        
+          <ng-template matStepLabel>Selecciona el archivo</ng-template>                
+          <input  type="file"
+                  (change)="paso1($event)"
+                  multiple="false"/>
+      </mat-step>   
+      <!-- Filas -->
+      <mat-step>
+        <ng-template matStepLabel>Omite filas innecesarias</ng-template>
+        <table class="table table-bordered">        
+          <tbody>
+            <tr *ngFor="let row of data; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>
+                <mat-checkbox [checked]="true"
+                              (change)="eliminarFila($event, i)">
+                </mat-checkbox>
+              </td>
+              <td *ngFor="let val of row">
+                {{ val }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+  
+        <button mat-flat-button
+                class="cchs-btn-flotante"
+                color="primary"
+                (click)="paso2()">
+                Siguiente
+        </button>
+      </mat-step>
+      <!-- Columnas -->
+      <mat-step>
+        <ng-template matStepLabel>Asigna la columna que corresponde</ng-template>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Fila</th>
+              <th *ngFor="let col of columnas; let i = index">
+                <mat-form-field appearance="fill">
+                  <mat-select (selectionChange)="asignarCampo($event.value, i)">
+                    <mat-option [value]="null" selected>Omitir</mat-option>
+                    <mat-option *ngFor="let campo of campos"
+                                [value]="campo.id">
+                      {{ campo.value }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of data; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td *ngFor="let val of row">
+                {{ val }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+  
+        <button mat-flat-button
+                color="primary"
+                class="cchs-btn-flotante"
+                (click)="finalizar()">
+                Finalizar
+        </button>
+      </mat-step>
+  </mat-horizontal-stepper>
+</div>

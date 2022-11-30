@@ -1,0 +1,317 @@
+{
+  "id": "636b104f9371c3002d020568",
+  "created_at": "2022-11-09T02:28:31.100Z",
+  "livemode": false,
+  "cfdi_version": 4,
+  "organization": "5f84b1b5d8a8c7001bdef7f3",
+  "date": "2022-11-09T02:28:31.073Z",
+  "customer": {
+    "id": "636b0fd19371c3002d0204a2",
+    "legal_name": "PEPITO  PEREZ",
+    "tax_system": "616",
+    "tax_id": "XAXX010101000",
+    "address": {
+      "country": "MEX",
+      "zip": "40900"
+    }
+  },
+  "address": {
+    "country": "MEX",
+    "street": "LIBRAMIENTO TECPAN",
+    "exterior": "102.740",
+    "interior": "01 EL",
+    "neighborhood": "TECPAN DE GALEANA CENTRO",
+    "city": "Técpan de Galeana",
+    "municipality": "Técpan de Galeana",
+    "state": "Guerrero",
+    "zip": "40900"
+  },
+  "verification_url": "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=08DA5C64-F056-4D5C-AC90-805CF815271E&re=LOT0605164U7&rr=XAXX010101000&tt=227728.000000&fe=V7ulRA==",
+  "status": "canceled",
+  "type": "I",
+  "cancellation_status": "none",
+  "total": 227728,
+  "uuid": "08DA5C64-F056-4D5C-AC90-805CF815271E",
+  "use": "S01",
+  "folio_number": 123,
+  "series": "CAS-",
+  "payment_form": "01",
+  "payment_method": "PUE",
+  "currency": "MXN",
+  "exchange": 1,
+  "stamp": {
+    "date": "2022-11-08T20:28:32",
+    "sat_cert_number": "30001000000400002495",
+    "sat_signature": "kxhEYLzddfzZqxKhFfdFGuLBSzJuJXFYToLcneUaHaGaQEkmXx5SsY0TZ2wSStVVbnKGXIeYoNSw44f3qweIXEUsmYFsL9x0LwZO+7tov4FeYkILnPEu71sLkcsu/mJf1d/xxBW7zwOaXPpCypBt3H5YHF3uEltBbY93u1ONxZg5XttfmEvTKBLwYxfJpdMfVSKztgVAQ1eK2N/dQulzZuJW5CoK0JqdvPP7w4Cl5E7A+diwPf8owfwYE7XuQgqjk8Ezx+kLMvcRujYPjzzbMMC/zg6kkWZs42J9XS/qZl+rOeXF9WHejbYkM6B0+7zNOD7soSCq5G08SWwjSi0EkA==",
+    "signature": "mZbADKVGPkjr1VUUlBp+kPMCKqekv/w14YIEYVVz+amnT/hpDLdmgKqAx4TUhXoMamuSyptR8PdCSqSltl0uncEz1vFn5IQbByHVill4QJ3NzocfW0j+FAA4mtTZXYQ8fHpJnT1Lym6b+cEi18G0z/S18mq60rHSY3RVTtsP9faMzPRQy/Hx2GPGHfFvm7uYrRsEXqlyKjq2u3RUIrwkaMFJNyUZBnEm96dHUbSBGTlW7laXpqdVajMZQTLKEd4p7Y/syIf4jVrh1kbLFvqqkpYx7eQNsywXvAfi2fvGu+hX2kICcWtofKmb+bqMlcBg8TRsfXo7owqknyD8V7ulRA==",
+    "complement_string": "||1.1|08DA5C64-F056-4D5C-AC90-805CF815271E|2022-11-08T20:28:32|mZbADKVGPkjr1VUUlBp+kPMCKqekv/w14YIEYVVz+amnT/hpDLdmgKqAx4TUhXoMamuSyptR8PdCSqSltl0uncEz1vFn5IQbByHVill4QJ3NzocfW0j+FAA4mtTZXYQ8fHpJnT1Lym6b+cEi18G0z/S18mq60rHSY3RVTtsP9faMzPRQy/Hx2GPGHfFvm7uYrRsEXqlyKjq2u3RUIrwkaMFJNyUZBnEm96dHUbSBGTlW7laXpqdVajMZQTLKEd4p7Y/syIf4jVrh1kbLFvqqkpYx7eQNsywXvAfi2fvGu+hX2kICcWtofKmb+bqMlcBg8TRsfXo7owqknyD8V7ulRA==|30001000000400002495||"
+  },
+  "items": [
+    {
+      "quantity": 4299,
+      "discount": 0,
+      "product": {
+        "description": "CRUCES DE PEAJE LIBRAMIENTO TECPAN Tarifa T01A Cuota Normal periodo octubre/2022.",
+        "product_key": "95111603",
+        "unit_key": "C62",
+        "unit_name": "Uno",
+        "price": 40,
+        "tax_included": true,
+        "taxes": [
+          {
+            "rate": 0.16,
+            "type": "IVA",
+            "withholding": false,
+            "factor": "Tasa",
+            "ieps_mode": "sum_before_taxes"
+          }
+        ],
+        "taxability": "02"
+      }
+    },
+    {
+      "quantity": 186,
+      "discount": 0,
+      "product": {
+        "description": "CRUCES DE PEAJE LIBRAMIENTO TECPAN Tarifa T01A Cuota Reducida periodo octubre/2022.",
+        "product_key": "95111603",
+        "unit_key": "C62",
+        "unit_name": "Uno",
+        "price": 29,
+        "tax_included": true,
+        "taxes": [
+          {
+            "rate": 0.16,
+            "type": "IVA",
+            "withholding": false,
+            "factor": "Tasa",
+            "ieps_mode": "sum_before_taxes"
+          }
+        ],
+        "taxability": "02"
+      }
+    },
+    {
+      "quantity": 168,
+      "discount": 0,
+      "product": {
+        "description": "CRUCES DE PEAJE LIBRAMIENTO TECPAN Tarifa T03C  periodo octubre/2022.",
+        "product_key": "95111603",
+        "unit_key": "C62",
+        "unit_name": "Uno",
+        "price": 77,
+        "tax_included": true,
+        "taxes": [
+          {
+            "rate": 0.16,
+            "type": "IVA",
+            "withholding": false,
+            "factor": "Tasa",
+            "ieps_mode": "sum_before_taxes"
+          }
+        ],
+        "taxability": "02"
+      }
+    },
+    {
+      "quantity": 61,
+      "discount": 0,
+      "product": {
+        "description": "CRUCES DE PEAJE LIBRAMIENTO TECPAN Tarifa T05C  periodo octubre/2022.",
+        "product_key": "95111603",
+        "unit_key": "C62",
+        "unit_name": "Uno",
+        "price": 116,
+        "tax_included": true,
+        "taxes": [
+          {
+            "rate": 0.16,
+            "type": "IVA",
+            "withholding": false,
+            "factor": "Tasa",
+            "ieps_mode": "sum_before_taxes"
+          }
+        ],
+        "taxability": "02"
+      }
+    },
+    {
+      "quantity": 39,
+      "discount": 0,
+      "product": {
+        "description": "CRUCES DE PEAJE LIBRAMIENTO TECPAN Tarifa T02B  periodo octubre/2022.",
+        "product_key": "95111603",
+        "unit_key": "C62",
+        "unit_name": "Uno",
+        "price": 77,
+        "tax_included": true,
+        "taxes": [
+          {
+            "rate": 0.16,
+            "type": "IVA",
+            "withholding": false,
+            "factor": "Tasa",
+            "ieps_mode": "sum_before_taxes"
+          }
+        ],
+        "taxability": "02"
+      }
+    },
+    {
+      "quantity": 251,
+      "discount": 0,
+      "product": {
+        "description": "CRUCES DE PEAJE LIBRAMIENTO TECPAN Tarifa T01M  periodo octubre/2022.",
+        "product_key": "95111603",
+        "unit_key": "C62",
+        "unit_name": "Uno",
+        "price": 19,
+        "tax_included": true,
+        "taxes": [
+          {
+            "rate": 0.16,
+            "type": "IVA",
+            "withholding": false,
+            "factor": "Tasa",
+            "ieps_mode": "sum_before_taxes"
+          }
+        ],
+        "taxability": "02"
+      }
+    },
+    {
+      "quantity": 40,
+      "discount": 0,
+      "product": {
+        "description": "CRUCES DE PEAJE LIBRAMIENTO TECPAN Tarifa T06C  periodo octubre/2022.",
+        "product_key": "95111603",
+        "unit_key": "C62",
+        "unit_name": "Uno",
+        "price": 116,
+        "tax_included": true,
+        "taxes": [
+          {
+            "rate": 0.16,
+            "type": "IVA",
+            "withholding": false,
+            "factor": "Tasa",
+            "ieps_mode": "sum_before_taxes"
+          }
+        ],
+        "taxability": "02"
+      }
+    },
+    {
+      "quantity": 152,
+      "discount": 0,
+      "product": {
+        "description": "CRUCES DE PEAJE LIBRAMIENTO TECPAN Tarifa T02C  periodo octubre/2022.",
+        "product_key": "95111603",
+        "unit_key": "C62",
+        "unit_name": "Uno",
+        "price": 77,
+        "tax_included": true,
+        "taxes": [
+          {
+            "rate": 0.16,
+            "type": "IVA",
+            "withholding": false,
+            "factor": "Tasa",
+            "ieps_mode": "sum_before_taxes"
+          }
+        ],
+        "taxability": "02"
+      }
+    },
+    {
+      "quantity": 25,
+      "discount": 0,
+      "product": {
+        "description": "CRUCES DE PEAJE LIBRAMIENTO TECPAN Tarifa T04C  periodo octubre/2022.",
+        "product_key": "95111603",
+        "unit_key": "C62",
+        "unit_name": "Uno",
+        "price": 77,
+        "tax_included": true,
+        "taxes": [
+          {
+            "rate": 0.16,
+            "type": "IVA",
+            "withholding": false,
+            "factor": "Tasa",
+            "ieps_mode": "sum_before_taxes"
+          }
+        ],
+        "taxability": "02"
+      }
+    },
+    {
+      "quantity": 35,
+      "discount": 0,
+      "product": {
+        "description": "CRUCES DE PEAJE LIBRAMIENTO TECPAN Tarifa T01L02A  periodo octubre/2022.",
+        "product_key": "95111603",
+        "unit_key": "C62",
+        "unit_name": "Uno",
+        "price": 78,
+        "tax_included": true,
+        "taxes": [
+          {
+            "rate": 0.16,
+            "type": "IVA",
+            "withholding": false,
+            "factor": "Tasa",
+            "ieps_mode": "sum_before_taxes"
+          }
+        ],
+        "taxability": "02"
+      }
+    },
+    {
+      "quantity": 10,
+      "discount": 0,
+      "product": {
+        "description": "CRUCES DE PEAJE LIBRAMIENTO TECPAN Tarifa T01L01A  periodo octubre/2022.",
+        "product_key": "95111603",
+        "unit_key": "C62",
+        "unit_name": "Uno",
+        "price": 59,
+        "tax_included": true,
+        "taxes": [
+          {
+            "rate": 0.16,
+            "type": "IVA",
+            "withholding": false,
+            "factor": "Tasa",
+            "ieps_mode": "sum_before_taxes"
+          }
+        ],
+        "taxability": "02"
+      }
+    },
+    {
+      "quantity": 13,
+      "discount": 0,
+      "product": {
+        "description": "CRUCES DE PEAJE LIBRAMIENTO TECPAN Tarifa T03B  periodo octubre/2022.",
+        "product_key": "95111603",
+        "unit_key": "C62",
+        "unit_name": "Uno",
+        "price": 77,
+        "tax_included": true,
+        "taxes": [
+          {
+            "rate": 0.16,
+            "type": "IVA",
+            "withholding": false,
+            "factor": "Tasa",
+            "ieps_mode": "sum_before_taxes"
+          }
+        ],
+        "taxability": "02"
+      }
+    }
+  ],
+  "cancellation_receipt": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<Acuse Fecha=\"2018-06-19T14:14:22.1105606\" RfcEmisor=\"MFI140321SP7\" xmlns:ns2=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:ns3=\"http://cancelacfd.sat.gob.mx\">\n\t<ns3:Folios>\n\t\t<ns3:UUID>CF5138A2-5395-4F05-949A-0F602D092E90</ns3:UUID>\n\t\t<ns3:EstatusUUID>205</ns3:EstatusUUID>\n\t</ns3:Folios>\n\t<ns2:Signature Id=\"SelloSAT\">\n\t\t<ns2:SignedInfo>\n\t\t\t<ns2:CanonicalizationMethod Algorithm=\"http://www.w3.org/TR/2001/REC-xml-c14n-20010315\"/>\n\t\t\t<ns2:SignatureMethod Algorithm=\"http://www.w3.org/2001/04/xmldsig-more#hmac-sha512\"/>\n\t\t\t<ns2:Reference URI=\"\">\n\t\t\t\t<ns2:Transforms>\n\t\t\t\t\t<ns2:Transform Algorithm=\"http://www.w3.org/TR/1999/REC-xpath-19991116\">\n\t\t\t\t\t\t<ns2:XPath>not(ancestor-or-self::*[local-name()='Signature'])</ns2:XPath>\n\t\t\t\t\t</ns2:Transform>\n\t\t\t\t</ns2:Transforms>\n\t\t\t\t<ns2:DigestMethod Algorithm=\"http://www.w3.org/2001/04/xmlenc#sha512\"/>\n\t\t\t\t<ns2:DigestValue>1v7ct7XCSjveShKElznQiOUiGW30G6YIOELa1IjIPVl2nkFqinWep+jfDYN1ci3k7KzNEh/L7O81Yacryf8/Xg==</ns2:DigestValue>\n\t\t\t</ns2:Reference>\n\t\t</ns2:SignedInfo>\n\t\t<ns2:SignatureValue>m4UW7xh9t4X5BtStrUO5IZfr5qCpT7sZAnr17FD/TBoZ78barf4y24hD3Z1GZW1S6PfnYUCVjzHQYYydQg4Fzg==</ns2:SignatureValue>\n\t\t<ns2:KeyInfo>\n\t\t\t<ns2:KeyName>00001088888800000016</ns2:KeyName>\n\t\t\t<ns2:KeyValue>\n\t\t\t\t<ns2:RSAKeyValue>\n\t\t\t\t\t<ns2:Modulus>xnL2zDPtH5jDsAZDTIfMqbKGrve+At8Kyx2EZvbfXbpK9uVExWS874oMelFzNq69/YqSReT3I7I8wr+joy5O7ouZH+4KWdIGp4Si6lHe0kntxzNmuuKyOPkJ9tMcntnFmQ4bfxFxlg/Ud2hCtuoy3j2xYkIXu5O4pGM98Nz8pAM=</ns2:Modulus>\n\t\t\t\t\t<ns2:Exponent>AQAB</ns2:Exponent>\n\t\t\t\t</ns2:RSAKeyValue>\n\t\t\t</ns2:KeyValue>\n\t\t</ns2:KeyInfo>\n\t</ns2:Signature>\n</Acuse>",
+  "export": "01"
+}

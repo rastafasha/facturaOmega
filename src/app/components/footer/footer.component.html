@@ -1,0 +1,34 @@
+<mat-divider></mat-divider>
+<footer [ngClass]="bg" class="sticky-footer" style="height: 15% !important;">
+    <div class="container-fluid my-auto">        
+        <nav [ngClass]="bg" class="navbar navbar-expand-lg navbar-light">          
+          <!-- <div class="collapse navbar-collapse"> -->
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" routerLink="/login">
+                 Inicio
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" target="_blank" href="../../../assets/files/manual facturacion.pdf">
+                  Manual de usuario
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" routerLink="/contacto">
+                  Contacto
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" routerLink="/aviso_privacidad">
+                  Aviso de privacidad
+                </a>
+              </li>
+            </ul>
+          <!-- </div> -->
+        </nav>
+        <div class="text-center my-auto copyright">
+          <span>Derechos reservados © Facturación Omega {{ hoy.getFullYear() }}</span>
+        </div>
+    </div>
+</footer>

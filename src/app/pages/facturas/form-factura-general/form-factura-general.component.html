@@ -1,0 +1,200 @@
+<!-- Barra de carga -->
+<mat-progress-bar mode="indeterminate"
+                  *ngIf="loading">
+</mat-progress-bar>
+
+<h1>Nueva factura</h1>
+
+<form class="cchs-form" [formGroup]="form">
+  <mat-card>
+    <mat-card-title>Configura tu factura</mat-card-title>
+    <mat-card-content>
+      <!-- Metodo de Pago -->
+      <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>Método de pago</mat-label>
+        <mat-select formControlName="metodoPago">
+          <mat-option [value]="metodo.id" *ngFor="let metodo of metodosPago">
+            {{ metodo.id }} - {{ metodo.nombre }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="!form.get('metodoPago').valid">
+          El método de pago es necesario
+        </mat-error>
+      </mat-form-field>
+      <!-- Uso -->
+      <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>Uso</mat-label>
+        <mat-select formControlName="uso">
+          <mat-option [value]="uso.value" *ngFor="let uso of usos">
+            {{ uso.value }} - {{ uso.desc }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="!form.get('uso').valid">
+          El uso de la factura es necesario
+        </mat-error>
+      </mat-form-field>
+      <!-- Formas pago -->
+      <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>Forma de pago</mat-label>
+        <mat-select formControlName="formaPago">
+          <mat-option [value]="forma.id" *ngFor="let forma of formasPago">
+            {{ forma.nombre }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="!form.get('formaPago').valid">
+          La forma de pago es requerida.
+        </mat-error>
+      </mat-form-field>
+      <!-- Status de los boletos -->
+      <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>Quiero facturar</mat-label>
+        <mat-select formControlName="status" cdkFocusInitial>
+          <mat-option [value]="3">Boletos sin timbrar</mat-option>
+          <mat-option [value]="2">Boletos timbrados por administrador</mat-option>
+          <mat-option [value]="1">Boletos timbrados por clientes</mat-option>
+          <mat-option [value]="4">Todos</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- Tipo de facturacion -->
+      <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>Tipo de facturacion</mat-label>
+        <mat-select formControlName="tipo"
+                    [errorStateMatcher]="matcher"
+                    (selectionChange)="seleccionarTipoFactura($event.value)">
+          <mat-option value="diaria">Diaria</mat-option>
+          <mat-option value="semanal">Semanal</mat-option>
+          <mat-option value="mensual">Mensual</mat-option>
+          <mat-option value="anual">Anual</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('tipo').errors">
+          {{ form.get('tipo').errors.message }}
+        </mat-error>
+      </mat-form-field>
+      <!-- periodo-->
+      <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>Periodo a facturar</mat-label>
+        <mat-select [errorStateMatcher]="matcher"
+                    formControlName="periodo">
+          <mat-option [value]="i"
+                      *ngFor="let periodo of periodos; let i = index">
+            {{ periodo.desc }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="!form.get('periodo').valid">
+          El periodo a facturar es requerido.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- tipos de pago-->
+      <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>Tipos de pago a facturar</mat-label>
+        <mat-select [errorStateMatcher]="matcher"
+                    formControlName="tipoPago"
+                    multiple>
+          <ng-container *ngFor="let tipoPago of tiposPago">
+            <mat-option [value]="tipoPago.id"
+                        *ngIf="tipoPago.facturable">
+              {{ tipoPago.nombre }}
+            </mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-error *ngIf="!form.get('tipoPago').valid">
+          Seleccione al menos un tipo de pago.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Carril-->
+      <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>Carril a facturar</mat-label>
+        <mat-select [errorStateMatcher]="matcher"
+                    formControlName="carril"
+                    multiple>
+          <mat-option [value]="carril"
+                      *ngFor="let carril of carriles">
+            {{ carril }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="!form.get('carril').valid">
+          Seleccione al menos un carril a facturar.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- solicitante -->
+      <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>Receptor de la factura</mat-label>
+        <mat-select [errorStateMatcher]="matcher"
+                    formControlName="rfc_id">
+          <mat-option [value]="i"
+                      *ngFor="let rfc of rfcs; let i = index">
+            {{ rfc.clave + ' - ' + (rfc.razon_social || (rfc.nombres + ' ' + rfc.apellidos)) }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="!form.get('rfc_id').valid">
+          El receptor de la factura es requerido.
+        </mat-error>
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button
+              color="secondary"
+              [disabled]="!form.valid || loading"
+              (click)="prefacturar()">
+        Ver prefactura
+      </button>
+      <button mat-raised-button
+              color="primary"
+              [disabled]="loading || !factura || factura.items.length == 0 || !form.valid"
+              (click)="facturar()">
+        Facturar
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>
+
+<br>
+
+<!-- Datos de la factura -->
+<div class="mat-elevation-z8 mb-2 p-3" *ngIf="factura">
+  <h4>Datos de la factura</h4>
+  <p>
+    Receptor: {{ factura.customer.legal_name }} <br>
+    Uso: {{ factura.uso | formaUso }} <br>
+    Forma de pago: {{ factura.payment_form | formaPago }}
+  </p>
+</div>
+
+<!-- Tabla -->
+<div class="mat-elevation-z8 mb-5" *ngIf="factura">
+  <mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="cantidad">
+      <mat-header-cell *matHeaderCellDef>Cantidad</mat-header-cell>
+      <mat-cell *matCellDef="let item"> {{ item.quantity }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="unidad">
+      <mat-header-cell *matHeaderCellDef>Unidad</mat-header-cell>
+      <mat-cell *matCellDef="let item"> {{ item.product.unit_name }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="descripcion">
+      <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
+      <mat-cell *matCellDef="let item"> {{ item.product.description }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="importe">
+      <mat-header-cell *matHeaderCellDef>Importe</mat-header-cell>
+      <mat-cell *matCellDef="let item"> {{ item.product.price | currency }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="total">
+      <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+      <mat-cell *matCellDef="let item"> {{ item.quantity * item.product.price | currency }} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+  </mat-table>
+  <mat-card class="text-right">Total: {{totalFactura|currency}}</mat-card>
+
+</div>

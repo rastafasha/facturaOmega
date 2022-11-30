@@ -1,0 +1,184 @@
+<ng-container *ngIf="sesion.rfc">
+
+  <form class="cchs-form" [formGroup]="formGeneral">
+    <mat-card>
+      <mat-card-title>Datos generales de la factura</mat-card-title>
+      <mat-card-content>
+        <p>
+          <b>Nombre: </b> {{ sesion.rfc | rfc }}
+          <br>
+          <b>RFC: </b> {{ sesion.rfc.clave }}
+          <br>
+          <b>Residencia fiscal:</b>
+        </p>
+        <mat-form-field appearance="fill" class="cchs-input-full">
+          <mat-label>Uso</mat-label>
+          <mat-select formControlName="uso">
+            <mat-option [value]="uso.value" *ngFor="let uso of usos">
+              {{ uso.value }} - {{ uso.desc }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="!formGeneral.get('uso').valid">
+            El uso de la factura es necesario
+          </mat-error>
+      </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  </form>
+
+  <br>
+
+  <!-- Formulario de busqueda -->
+  <form class="cchs-form" [formGroup]="form">
+    <mat-card>
+      <mat-progress-bar mode="indeterminate"
+                        *ngIf="loading">
+      </mat-progress-bar>
+
+      <mat-card-title>Busca y agrega los boletos que deseas facturar</mat-card-title>
+      <mat-card-content>
+        <!-- Fecha -->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Fecha</mat-label>
+            <input  matInput
+                    [matDatepickerFilter]="dateFilter"
+                    [matDatepicker]="dp"
+                    [errorStateMatcher]="matcher"
+                    formControlName="fecha"
+                    autocomplete="off">
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp></mat-datepicker>
+            <mat-error *ngIf="!form.get('fecha').valid">
+              La fecha es requerida para la búsqueda
+            </mat-error>
+        </mat-form-field>
+        <!-- Hora-->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+          <mat-label>Hora del boleto</mat-label>
+          <input  matInput
+                  [textMask]="{mask: mask}"
+                  [errorStateMatcher]="matcher"
+                  formControlName="hora"
+                  autocomplete="off">
+          <mat-error *ngIf="!form.get('hora').valid">
+              La hora es requerida
+          </mat-error>
+      </mat-form-field>
+        <!-- Carril -->
+        <mat-form-field appearance="fill"
+                        class="cchs-input-full">
+            <mat-label>Carril</mat-label>
+            <!-- <input  matInput
+                    type="number"
+                    [errorStateMatcher]="matcher"
+                    formControlName="carril"
+                    autocomplete="off"> -->
+            <mat-select [errorStateMatcher]="matcher" formControlName="carril">
+              <mat-option [value]="1">1</mat-option>
+              <mat-option [value]="2">2</mat-option>
+              <mat-option [value]="3">3</mat-option>
+              <mat-option [value]="4">4</mat-option>
+            </mat-select>
+            <mat-error *ngIf="!form.get('carril').valid">
+              El carril es requerido para la búsqueda
+            </mat-error>
+        </mat-form-field>
+        <!-- Folio -->
+        <mat-form-field appearance="fill"
+                        class="cchs-input-full">
+            <mat-label>Folio</mat-label>
+            <input  matInput
+                    type="number"
+                    [errorStateMatcher]="matcher"
+                    formControlName="folio"
+                    autocomplete="off">
+            <mat-error *ngIf="!form.get('folio').valid">
+                El folio es requerido para la búsqueda
+            </mat-error>
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button
+                color="primary"
+                [disabled]="!form.valid"
+                (click)="buscar()">
+          <mat-icon>add</mat-icon>
+          Agregar
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+
+  <br>
+
+  <div class="mat-elevation-z8" *ngIf="boletos.length > 0">
+    <mat-table [dataSource]="boletos">
+
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
+        <mat-cell *matCellDef="let boleto"> {{ boleto.fecha | date: 'dd/MM/yyyy' }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="hora">
+        <mat-header-cell *matHeaderCellDef>Hora</mat-header-cell>
+        <mat-cell *matCellDef="let boleto"> {{ boleto.hora }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="carril">
+        <mat-header-cell *matHeaderCellDef>Carril</mat-header-cell>
+        <mat-cell *matCellDef="let boleto"> {{ boleto.carril }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="senal">
+        <mat-header-cell *matHeaderCellDef>Señal</mat-header-cell>
+        <mat-cell *matCellDef="let boleto"> {{ boleto.senal }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tarifa">
+        <mat-header-cell *matHeaderCellDef>Tarifa</mat-header-cell>
+        <mat-cell *matCellDef="let boleto"> {{ boleto.tarifa | currency }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="pago">
+        <mat-header-cell *matHeaderCellDef>Pago</mat-header-cell>
+        <mat-cell *matCellDef="let boleto"> {{ boleto.pago }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="folio">
+        <mat-header-cell *matHeaderCellDef>Folio</mat-header-cell>
+        <mat-cell *matCellDef="let boleto"> {{ boleto.folio }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let boleto; let i = index">
+          <button mat-icon-button
+                  color="warn"
+                  (click)="quitarBoleto(i)">
+                  <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+    </mat-table>
+  </div>
+
+
+  <div class="cchs-button-toolbar mt-2">
+    <button mat-raised-button
+            [disabled]="loading"
+            routerLink="/{{ sesion.path }}/facturas">
+            Regresar
+    </button>
+
+    <button mat-raised-button
+            [disabled]="sesion.rfc == null || loading ||boletos.length == 0 || !formGeneral.valid"
+            color="primary"
+            (click)="facturar()">
+            Facturar
+    </button>
+  </div>
+
+</ng-container>

@@ -1,0 +1,18 @@
+<mat-nav-list>
+  <div mat-subheader>Selecciona un R.F.C. para trabajar</div>
+
+  <mat-form-field appearance="outline" class="cchs-input-full">
+    <mat-label>Buscar RFC</mat-label>
+    <input matInput
+          (keyup)="buscar($event)"
+          autocomplete="off">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <a  mat-list-item
+      (click)="seleccionarRFC(rfc)"
+      *ngFor="let rfc of data">
+      <div mat-line>{{ rfc.clave }}</div>
+      <div mat-line> {{ rfc | rfc }} </div>
+  </a>
+</mat-nav-list>

@@ -1,0 +1,10 @@
+
+<mat-progress-bar mode="indeterminate"
+                  *ngIf="loading">
+</mat-progress-bar>
+
+<h1>Importar documento XLS</h1>
+
+<input  type="file"
+        (change)="importar($event)"
+        multiple="false"/>

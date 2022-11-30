@@ -1,0 +1,70 @@
+<mat-progress-bar mode="query" *ngIf="loading"></mat-progress-bar>
+
+<h2 mat-dialog-title>Pago {{ parcialidad }}, saldo {{ balance | currency }}</h2>
+
+<mat-dialog-content>
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+        <select-forma-pago formControlName="forma_pago">
+        </select-forma-pago>
+        <!-- Fecha del pago -->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Fecha</mat-label>
+            <input  matInput
+                    [matDatepicker]="dp"
+                    [errorStateMatcher]="matcher"
+                    formControlName="fecha"
+                    autocomplete="off">
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp></mat-datepicker>
+            <mat-error *ngIf="!form.get('fecha').valid">
+              Debe seleccionar la fecha.
+            </mat-error>
+        </mat-form-field>      
+        <!-- Hora del pago -->
+        <!-- <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Hora del pago</mat-label>
+            <input  matInput
+                    formControlName="hora"
+                    autocomplete="off"
+                    [errorStateMatcher]="matcher"
+                    [textMask]="{mask: mask}">
+            <mat-error *ngIf="!form.get('hora').valid">
+                La hora es requerida.
+            </mat-error>
+        </mat-form-field> -->
+        <!--Monto del pago -->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Monto</mat-label>
+            <input  matInput
+                    type="number"
+                    min=1
+                    [errorStateMatcher]="matcher"
+                    formControlName="monto"
+                    autocomplete="off">
+            <mat-error *ngIf="!form.get('monto').valid">
+                El monto del pago es requerido, mayor a cero y menor o igual a {{ balance | currency }}.
+            </mat-error>
+        </mat-form-field>
+       <!--  <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Descripción</mat-label>
+            <textarea   matInput
+                        [errorStateMatcher]="matcher"
+                        formControlName="descripcion">
+            </textarea>
+        </mat-form-field> -->
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-flat-button
+            mat-dialog-close
+            [disabled]="loading">
+            Cerrar
+    </button>
+    <button mat-flat-button
+            [disabled]="loading || !form.valid"
+            color="primary"
+            (click)="handleSubmit()">
+            Aplicar cambios
+    </button>
+</mat-dialog-actions>

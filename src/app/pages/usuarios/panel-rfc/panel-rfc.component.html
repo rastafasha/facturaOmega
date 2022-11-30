@@ -1,0 +1,90 @@
+<h1>Lista RFC's</h1>
+
+<div class="cchs-button-toolbar">
+  <button mat-raised-button color="primary" (click)="agregarRFC()">
+    <mat-icon>add</mat-icon>
+    Agregar RFC
+  </button>
+</div>
+
+<!-- Barra de carga -->
+<mat-progress-bar mode="indeterminate"
+                  *ngIf="loading">
+</mat-progress-bar>
+
+<!-- Lista movil -->
+<div class="cchs-lista">
+  <mat-card class="mb-2" *ngFor="let rfc of dataSource.data">
+    <mat-card-header>
+      <mat-card-title>{{ rfc.clave }}</mat-card-title>
+      <mat-card-subtitle>{{ rfc | rfc }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        <b>Correl electrónico: </b> {{ rfc.email }} <br>
+        <b>Teléfono: </b> {{ rfc.telefono }}
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="primary" (click)="agregarRFC(rfc)">
+        <mat-icon>edit</mat-icon>
+        &nbsp;Editar
+      </button>
+      <button mat-button color="warn" (click)="eliminarRFC(rfc)">
+        <mat-icon>delete</mat-icon>
+        &nbsp;Eliminar
+      </button>
+    </mat-card-actions>
+  </mat-card>
+<!--   <app-paginador-movil (onChange)="cambiarPaginaMovil($event)"
+                       [pagina]="paginator ? paginator.pageIndex : 0"
+                       [totalRegistros]="totalRegistros"
+                       [totalPorPagina]="totalPagina"
+                       [disabled]="loading">    
+  </app-paginador-movil> -->
+</div>
+
+
+<!-- Tabla -->
+<div class="mat-elevation-z8 cchs-table">
+  <mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="rfc">
+      <mat-header-cell *matHeaderCellDef> R.F.C. </mat-header-cell>
+      <mat-cell *matCellDef="let rfc"> {{ rfc.clave }} </mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="contribuyente">
+      <mat-header-cell *matHeaderCellDef> Contribuyente </mat-header-cell>
+      <mat-cell *matCellDef="let rfc"> {{ rfc | rfc }} </mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef> Correo electrónico </mat-header-cell>
+      <mat-cell *matCellDef="let rfc"> {{ rfc.email }} </mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="telefono">
+      <mat-header-cell *matHeaderCellDef> Teléfono </mat-header-cell>
+      <mat-cell *matCellDef="let rfc"> {{ rfc.telefono }} </mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let rfc">
+        <button mat-icon-button color="primary" (click)="agregarRFC(rfc)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="eliminarRFC(rfc)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+  
+    <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+  </mat-table>
+  <!-- <mat-paginator  [length]="totalRegistros"
+                  [pageSize]="totalPagina"
+                  [disabled]="loading">
+  </mat-paginator> -->
+</div>

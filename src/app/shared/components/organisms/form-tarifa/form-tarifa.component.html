@@ -1,0 +1,40 @@
+<form class="cchs-form" [formGroup]="form" (ngSubmit)="handleSubmit()">    
+    <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>ID de la tarifa</mat-label>
+        <input  matInput
+                [errorStateMatcher]="matcher"
+                formControlName="id"
+                autocomplete="off"
+                cdkFocusInitial>
+        <mat-error *ngIf="!form.get('id').valid">
+            El ID de la tarifa es requerido y debe tener de 3 a 15 caracteres.
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>Valor</mat-label>
+        <input  matInput
+                type="number"
+                [errorStateMatcher]="matcher"
+                formControlName="valor"
+                autocomplete="off">
+        <mat-error *ngIf="!form.get('valor').valid">
+            El valor de la tarifa es requerida y no puede ser menor que 1.
+        </mat-error>
+    </mat-form-field>
+
+    <div class="cchs-button-toolbar">
+        <button mat-flat-button
+                type="button"
+                [disabled]="loading"
+                color="secondary"
+                (click)="handleCancel()">
+                Cancelar
+        </button>        
+        <button mat-flat-button
+                type="submit"
+                [disabled]="loading || !form.valid"
+                color="primary">
+                Aplicar cambios
+        </button>
+    </div>
+</form>

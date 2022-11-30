@@ -1,0 +1,24 @@
+
+<h1>{{ title }}</h1>
+
+<div class="cchs-button-toolbar">
+    <button
+        mat-raised-button
+        type="button"
+        color="primary"
+        (click)="handleNew()">
+      <mat-icon>add</mat-icon>
+      Nueva tarifa
+    </button>
+</div>
+
+<mat-progress-bar
+    mode="indeterminate"
+    *ngIf="loading">
+</mat-progress-bar>
+
+<organism-table-tarifas
+    [tarifas]="tarifas"
+    (onUpdate)="handleUpdate($event)"
+    (onDelete)="handleDelete($event)">
+</organism-table-tarifas>

@@ -1,0 +1,41 @@
+<div class="mat-elevation-z8 cchs-table">
+    <mat-table [dataSource]="dataSource">
+  
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+        <mat-cell *matCellDef="let tarifa">{{ tarifa.id }}</mat-cell>
+      </ng-container>
+    
+      <ng-container matColumnDef="value">
+        <mat-header-cell *matHeaderCellDef>Precio</mat-header-cell>
+        <mat-cell *matCellDef="let tarifa">{{ tarifa.value | currency }}</mat-cell>
+      </ng-container>      
+      
+      <ng-container matColumnDef="acciones">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let tarifa">
+          <button mat-icon-button
+                  color="primary"
+                  [disabled]="loading"
+                  title="Editar"
+                  (click)="handleUpdate(tarifa)">
+                  <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button
+                  color="warn"
+                  title="Eliminar"
+                  [disabled]="loading"
+                  (click)="handleDelete(tarifa)">
+                  <mat-icon>delete</mat-icon>
+          </button>          
+        </mat-cell>
+      </ng-container>
+    
+      <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+    </mat-table>
+    <mat-paginator  [length]="total" 
+                    [pageSize]="pageSize"
+                    [disabled]="loading">
+    </mat-paginator>
+  </div>

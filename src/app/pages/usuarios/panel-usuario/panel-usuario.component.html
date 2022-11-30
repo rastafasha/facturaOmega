@@ -1,0 +1,155 @@
+<h1>Usuarios</h1>
+
+<div class="cchs-button-toolbar">
+  <button mat-raised-button
+          color="primary"
+          routerLink="/{{ sesion.path }}/usuario">
+    <mat-icon>add</mat-icon>
+    Nuevo usuario
+  </button>
+</div>
+  
+<!-- Barra de carga -->
+<mat-progress-bar mode="indeterminate"
+                  *ngIf="loading">
+</mat-progress-bar>
+
+<!-- Cards -->
+<div class="cchs-lista">
+  <mat-card class="mb-2" *ngFor="let usuario of dataSource.data; let i = index">
+    <mat-card-header>
+      <mat-card-title>{{ usuario.nombres }} {{ usuario.apellidos }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        <b>Correo electrónico: </b> {{ usuario.email }}<br>
+        <b>Teléfono: </b> {{ usuario.telefono }}<br>
+        <b>Status: </b> {{ usuario.alta == 1 ? 'Activo' : 'Inactivo' }} 
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button
+              color="primary"
+              [disabled]="loading"
+              routerLink="/{{ sesion.path }}/usuario/{{ usuario.id }}">
+              <mat-icon>edit</mat-icon>
+              &nbsp;Editar
+      </button>
+      <button mat-button
+              color="warn"
+              title="Dar de baja"
+              [disabled]="loading"
+              *ngIf="usuario.alta == ALTA"
+              (click)="cambiarStatus(usuario, i)">
+              <mat-icon>cancel</mat-icon>
+              &nbsp;Baja
+      </button>
+      <button mat-button
+              color="secondary"
+              title="Dar de alta"
+              [disabled]="loading"
+              *ngIf="usuario.alta == BAJA"
+              (click)="cambiarStatus(usuario, i)">
+              <mat-icon>check</mat-icon>
+              &nbsp;Alta
+      </button>
+      <button mat-button
+              title="Reiniciar contraseña"
+              [disabled]="loading"
+              (click)="reiniciarPassword(usuario)">
+              <mat-icon>vpn_key</mat-icon>
+              &nbsp;Reiniciar
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  <app-paginador-movil (onChange)="cambiarPaginaMovil($event)"
+                       [pagina]="paginator ? paginator.pageIndex : 0"
+                       [totalRegistros]="totalRegistros"
+                       [totalPorPagina]="pageSize"
+                       [disabled]="loading">    
+  </app-paginador-movil>
+</div>
+
+<!-- Tabla -->
+<div class="mat-elevation-z8 cchs-table">
+  <mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="usuario">
+      <mat-header-cell *matHeaderCellDef>Usuario</mat-header-cell>
+      <mat-cell *matCellDef="let usuario">{{ usuario.nombres }} {{ usuario.apellidos }}</mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef>Correo electrónico</mat-header-cell>
+      <mat-cell *matCellDef="let usuario">{{ usuario.email }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="telefono">
+      <mat-header-cell *matHeaderCellDef>Teléfono</mat-header-cell>
+      <mat-cell *matCellDef="let usuario"> {{ usuario.telefono }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipo">
+        <mat-header-cell *matHeaderCellDef>Perfiles</mat-header-cell>
+        <mat-cell *matCellDef="let usuario">
+          <mat-chip-list class="mat-chip-list-stacked">
+            <mat-chip *ngFor="let perfil of usuario.perfiles">
+              {{ perfil | perfil }}
+            </mat-chip>
+          </mat-chip-list>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+      <mat-cell *matCellDef="let usuario">
+        <mat-chip-list class="mat-chip-list-stacked" aria-label="Color selection">
+          <mat-chip selected [color]="usuario.alta == 1 ? 'primary' : 'warn'">
+            {{ usuario.alta == 1 ? 'Activo' : 'Inactivo' }} 
+          </mat-chip>
+        </mat-chip-list>         
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let usuario; let i = index">
+        <button mat-icon-button
+                color="primary"
+                [disabled]="loading"
+                routerLink="/{{ sesion.path }}/usuario/{{ usuario.id }}">
+                <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button
+                color="warn"
+                title="Dar de baja"
+                [disabled]="loading"
+                *ngIf="usuario.alta == ALTA"
+                (click)="cambiarStatus(usuario, i)">
+                <mat-icon>cancel</mat-icon>
+        </button>
+        <button mat-icon-button
+                color="secondary"
+                title="Dar de alta"
+                [disabled]="loading"
+                *ngIf="usuario.alta == BAJA"
+                (click)="cambiarStatus(usuario, i)">
+                <mat-icon>check</mat-icon>
+        </button>
+        <button mat-icon-button
+                title="Reiniciar contraseña"
+                [disabled]="loading"
+                (click)="reiniciarPassword(usuario)">
+                <mat-icon>vpn_key</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+  
+    <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+  </mat-table>
+  <mat-paginator  [length]="totalRegistros" 
+                  [pageSize]="pageSize"
+                  [disabled]="loading">
+  </mat-paginator>
+</div>

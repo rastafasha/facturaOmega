@@ -1,0 +1,106 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button (click)="menu.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+   <!--  <img src="../../assets/img/logo_gris.png" class="img-fluid"/> -->
+    <div _ngcontent-sqw-c50="" class="flex-spacer"></div>
+
+    <!-- Seleccion de RFCs -->
+    <button mat-button
+            class="cchs-seleccion-rfc-button"
+            (click)="seleccionarRFC()"
+            *ngIf="sesion.perfil == CLIENTE">
+            <span *ngIf="sesion && sesion.rfc && sesion.rfc.clave">{{  sesion.rfc | rfc | uppercase }}</span>
+            <span *ngIf="!sesion || !sesion.rfc || !sesion.rfc.clave">Seleccione un RFC</span>
+            &nbsp;<mat-icon>keyboard_arrow_down</mat-icon>
+    </button>
+
+
+    <!-- Menu de usuarios -->
+    <ng-container *ngIf="sesion.usuario.perfiles.length > 1">
+      <button mat-button [matMenuTriggerFor]="menuUsuario">
+        {{ sesion.perfil | perfil }}
+      <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+      <mat-menu #menuUsuario="matMenu">
+        <button mat-menu-item
+                *ngFor="let perfil of sesion.usuario.perfiles"
+                (click)="seleccionarPerfil(perfil)">
+                <mat-icon *ngIf="perfil == sesion.perfil">check_box</mat-icon>
+                <mat-icon *ngIf="perfil != sesion.perfil">check_box_outline_blank</mat-icon>
+                <span>{{ perfil | perfil }}</span>
+        </button>
+      </mat-menu>
+    </ng-container>
+    <button mat-icon-button
+            (click)="filtro.toggle()"
+            *ngIf="camposFiltro && camposFiltro.length > 0">
+            <mat-icon>search</mat-icon>
+    </button>
+</mat-toolbar>
+
+<!-- Menu lateral -->
+<mat-drawer-container autosize class="cchs-centrar">
+  <mat-drawer #menu mode="side" opened class="mat-elevation-z8">
+
+    <!-- Perfil -->
+    <mat-card class="cchs-seleccion-rfc-card mat-elevation-z8"
+              *ngIf="sesion && sesion.rfc && sesion.perfil == CLIENTE && rfcs.length > 0"
+              (click)="seleccionarRFC()">
+      <mat-card-header>
+        <mat-card-title>
+          {{ sesion.rfc.clave | uppercase }}
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{ sesion.rfc | rfc | uppercase }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-actions align="center">
+        <button mat-icon-button>
+          <mat-icon>keyboard_arrow_down</mat-icon>&nbsp;
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Menu -->
+    <mat-selection-list [multiple]="false">
+      <div mat-subheader>{{ sesion.usuario.nombreCompleto | uppercase }}</div>
+      <ng-container *ngFor="let ruta of menuPrincipal">
+        <mat-list-option *ngIf="ruta.data" (click)="ir(ruta.path)">
+          <mat-icon mat-list-icon>{{ ruta.data.icon }}</mat-icon>
+          <div mat-line>{{ ruta.data.label }}</div>
+        </mat-list-option>
+      </ng-container>
+
+      <mat-divider></mat-divider>
+
+      <mat-list-option (click)="salir()">
+        <mat-icon mat-list-icon>exit_to_app</mat-icon>
+        <div mat-line >Salir</div>
+      </mat-list-option>
+    </mat-selection-list>
+  </mat-drawer>
+
+  <!-- Filtros -->
+  <mat-drawer #filtro mode="side" class="mat-elevation-z8" position="end">
+      <app-filtros (onFiltered)="onFiltered($event)"
+                  [fieldFilters]="camposFiltro">
+      </app-filtros>
+  </mat-drawer>
+
+  <!-- Router Outlet -->
+  <div class="container-fluid pt-3">
+    <div class="row">
+      <div class="col">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</mat-drawer-container>
+
+<app-footer bg="bg-light"></app-footer>
+
+<div class="cchs-loading-shade" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>

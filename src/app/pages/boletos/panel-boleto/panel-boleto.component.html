@@ -1,0 +1,128 @@
+<h1>Boletos</h1>
+
+<div class="cchs-button-toolbar" *ngIf="sesion.perfil == CAPTURISTA">
+    <button mat-raised-button color="primary" (click)="agregarBoleto()">
+    <mat-icon>add</mat-icon>
+    Agregar boleto
+  </button>
+    <button mat-raised-button color="primary" routerLink="/{{ sesion.path }}/importar_boletos">
+          <mat-icon>table_view</mat-icon>
+          Importar boletos
+  </button>
+    <button mat-raised-button color="warn" [disabled]="loading" (click)=eliminarBoletos()>
+          <mat-icon>delete</mat-icon>
+          Eliminar boletos
+  </button>
+</div>
+
+<div class="cchs-button-toolbar" *ngIf="sesion.perfil == ADMINISTRADOR">
+    <button mat-raised-button color="primary" (click)="generarReporte()">
+          <mat-icon>table_view</mat-icon>
+          Descargar XLS
+  </button>
+</div>
+
+<!-- Barra de carga -->
+<mat-progress-bar mode="indeterminate" *ngIf="loading">
+</mat-progress-bar>
+
+<!-- Lista movil -->
+<div class="cchs-lista">
+    <mat-card class="mb-2" *ngFor="let boleto of dataSource.data">
+        <mat-card-content>
+            <p>
+                <b>Fecha: </b> {{ boleto.fecha | date: 'dd/MM/yyyy' }} <br>
+                <b>Hora: </b> {{ boleto.hora }} <br>
+                <b>Carril: </b> {{ boleto.carril }} <br>
+                <b>Señal: </b> {{ boleto.senal }} <br>
+                <b>Tarifa: </b> {{ boleto.tarifa | currency }} <br>
+                <b>Pago: </b> {{ boleto.pago }} <br>
+                <b>Folio: </b> {{ boleto.folio | folioBoleto }} <br>
+                <b>Timbrado: </b> {{ boleto.ocupado ? 'Si' : 'No' }}
+                <b>Acciones: </b>
+            </p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-button *ngIf="boleto.id_facturapi" (click)="descargar(boleto)">
+              <mat-icon>picture_as_pdf</mat-icon>
+              &nbsp;Factura
+      </button>
+            <button mat-button color="primary" (click)="agregarBoleto(boleto)">
+              <mat-icon>edit</mat-icon>
+              &nbsp;Editar
+      </button>
+            <button mat-button color="warn" (click)="eliminarBoleto(boleto)">
+              <mat-icon>delete</mat-icon>
+              &nbsp;Eliminar
+      </button>
+        </mat-card-actions>
+    </mat-card>
+    <app-paginador-movil (onChange)="cambiarPaginaMovil($event)" [pagina]="paginator ? paginator.pageIndex : 0" [totalRegistros]="totalRegistros" [totalPorPagina]="pageSize" [disabled]="loading">
+    </app-paginador-movil>
+</div>
+
+<!-- Tabla -->
+<div class="mat-elevation-z8 cchs-table">
+    <mat-table [dataSource]="dataSource">
+
+        <ng-container matColumnDef="fecha">
+            <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
+            <mat-cell *matCellDef="let boleto"> {{ boleto.fecha | date: 'dd/MM/yyyy' }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="hora">
+            <mat-header-cell *matHeaderCellDef>Hora</mat-header-cell>
+            <mat-cell *matCellDef="let boleto"> {{ boleto.hora }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="carril">
+            <mat-header-cell *matHeaderCellDef>Carril</mat-header-cell>
+            <mat-cell *matCellDef="let boleto"> {{ boleto.carril }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="senal">
+            <mat-header-cell *matHeaderCellDef>Señal</mat-header-cell>
+            <mat-cell *matCellDef="let boleto"> {{ boleto.senal }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tarifa">
+            <mat-header-cell *matHeaderCellDef>Tarifa</mat-header-cell>
+            <mat-cell *matCellDef="let boleto"> {{ boleto.tarifa | currency }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pago">
+            <mat-header-cell *matHeaderCellDef>Pago</mat-header-cell>
+            <mat-cell *matCellDef="let boleto"> {{ boleto.pago }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="folio">
+            <mat-header-cell *matHeaderCellDef>Folio</mat-header-cell>
+            <mat-cell *matCellDef="let boleto"> {{ boleto.folio | folioBoleto }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="timbrado">
+            <mat-header-cell *matHeaderCellDef>Timbrado</mat-header-cell>
+            <mat-cell *matCellDef="let boleto"> {{ boleto.ocupado ? 'Si' : 'No' }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+            <mat-cell *matCellDef="let boleto">
+                <button mat-icon-button *ngIf="boleto.id_facturapi" (click)="descargar(boleto)">
+                <mat-icon>picture_as_pdf</mat-icon>
+        </button>
+                <button mat-icon-button color="primary" (click)="agregarBoleto(boleto)">
+                <mat-icon>edit</mat-icon>
+        </button>
+                <button mat-icon-button color="warn" (click)="eliminarBoleto(boleto)">
+                <mat-icon>delete</mat-icon>
+        </button>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+    </mat-table>
+    <mat-paginator [disabled]="loading" [length]="totalRegistros" [pageSize]="pageSize">
+    </mat-paginator>
+</div>

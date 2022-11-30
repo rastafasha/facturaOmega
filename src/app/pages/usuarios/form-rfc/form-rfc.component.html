@@ -1,0 +1,134 @@
+<mat-progress-bar mode="query" *ngIf="loading"></mat-progress-bar>
+
+<h2 mat-dialog-title>Editar RFC</h2>
+
+<mat-dialog-content>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <!-- Numero de RFC -->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>R.F.C.</mat-label>
+            <input matInput [errorStateMatcher]="matcher" formControlName="rfc" autocomplete="off" cdkFocusInitial>
+            <mat-error *ngIf="!form.get('rfc').valid">
+                El RFC es requerido y debe ser un RFC válido.
+            </mat-error>
+        </mat-form-field>
+        <!-- Tipo de contribuyente -->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Tipo de contribuyente</mat-label>
+            <mat-select formControlName="tipo" (selectionChange)="cambiarTipo($event.value)">
+                <mat-option [value]="PERSONA_FISICA">Persona física</mat-option>
+                <mat-option [value]="PERSONA_MORAL">Persona moral</mat-option>
+            </mat-select>
+            <mat-error *ngIf="!form.get('tipo').valid">
+                El tipo de persona es requerido.
+            </mat-error>
+        </mat-form-field>
+        <!-- Clave de Régimen Fiscal -->
+        <mat-form-field appearance="fill" class="cchs-input-full" *ngIf="form.get('tipo').value == PERSONA_FISICA">
+            <mat-label>Clave de Régimen Fiscal</mat-label>
+            <mat-select formControlName="tax_system">
+                <mat-option [value]="regimenFiscal.value" *ngFor="let regimenFiscal of regimenFiscal">
+                    {{ regimenFiscal.value }} - {{ regimenFiscal.desc }}
+                </mat-option>
+            </mat-select>
+            <!-- <mat-select formControlName="tax_system">
+          <mat-option value="605">605 - Sueldos y Salarios e Ingresos Asimilados a Salarios</mat-option>
+          <mat-option value="606">606 - Arrendamiento</mat-option>
+          <mat-option value="607">607 - Régimen de Enajenación o Adquisición de Bienes</mat-option>
+          <mat-option value="608">608 - Demás ingresos</mat-option>
+          <mat-option value="610">610 - Residentes en el Extranjero sin Establecimiento Permanente en México</mat-option>
+          <mat-option value="611">611 - Ingresos por Dividendos (socios y accionistas)</mat-option>
+          <mat-option value="612">612 - Personas Físicas con Actividades Empresariales y Profesionales</mat-option>
+          <mat-option value="614">614 - Ingresos por intereses</mat-option>
+          <mat-option value="615">615 - Régimen de los ingresos por obtención de premios</mat-option>
+          <mat-option value="616">616 - Sin obligaciones fiscales</mat-option>
+          <mat-option value="621">621 - Incorporación Fiscal</mat-option>
+          <mat-option value="625">625 - Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas</mat-option>
+          <mat-option value="626">626 - Régimen Simplificado de Confianza</mat-option>
+      </mat-select> -->
+            <mat-error *ngIf="!form.get('tax_system').valid">
+                La clave de régimen fiscal es requerido.
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="cchs-input-full" *ngIf="form.get('tipo').value == PERSONA_MORAL">
+            <mat-label>Clave de Régimen Fiscal</mat-label>
+            <mat-select formControlName="tax_system">
+                <mat-option [value]="regimenFiscal.value" *ngFor="let regimenFiscal of regimenFiscal">
+                    {{ regimenFiscal.value }} - {{ regimenFiscal.desc }}
+                </mat-option>
+            </mat-select>
+            <!-- <mat-select formControlName="tax_system">
+          <mat-option value="601">601 - General de Ley Personas Morales</mat-option>
+
+          <mat-option value="603">603 - Personas Morales con Fines no Lucrativos</mat-option>
+          <mat-option value="610">610 - Residentes en el Extranjero sin Establecimiento Permanente en México</mat-option>
+          <mat-option value="616">616 - Sin obligaciones fiscales</mat-option>
+          <mat-option value="620">620 - Sociedades Cooperativas de Producción que optan por Diferir sus Ingresos</mat-option>
+          <mat-option value="622">622 - Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras</mat-option>
+          <mat-option value="623">623 - Opcional para Grupos de Sociedades</mat-option>
+          <mat-option value="624">624 - Coordinados</mat-option>
+          <mat-option value="626">626 - Régimen Simplificado de Confianza</mat-option>
+      </mat-select> -->
+            <mat-error *ngIf="!form.get('tax_system').valid">
+                La clave de régimen fiscal es requerido.
+            </mat-error>
+        </mat-form-field>
+        <!-- Razon social de persona moral-->
+        <mat-form-field appearance="fill" class="cchs-input-full" *ngIf="form.get('tipo').value == PERSONA_MORAL">
+            <mat-label>Razon social</mat-label>
+            <input matInput [errorStateMatcher]="matcher" formControlName="razon_social" autocomplete="off">
+            <mat-error *ngIf="!form.get('razon_social').valid">
+                La razón social es requerida y debe tener una longitud de entre 2 y 200 caracteres.
+            </mat-error>
+        </mat-form-field>
+        <!-- Razon social de persona fisica -->
+        <mat-form-field appearance="fill" class="cchs-input-full" *ngIf="form.get('tipo').value == PERSONA_FISICA">
+            <mat-label>Nombres</mat-label>
+            <input matInput [errorStateMatcher]="matcher" formControlName="nombres" autocomplete="off">
+            <mat-error *ngIf="!form.get('nombres').valid">
+                El nombre es requerido y debe tener una longitud de entre 2 y 200 caracteres.
+            </mat-error>
+        </mat-form-field>
+        <!-- Apellidos de persona fisica -->
+        <mat-form-field appearance="fill" class="cchs-input-full" *ngIf="form.get('tipo').value == PERSONA_FISICA">
+            <mat-label>Apellidos</mat-label>
+            <input matInput [errorStateMatcher]="matcher" formControlName="apellidos" autocomplete="off">
+            <mat-error *ngIf="!form.get('apellidos').valid">
+                Los apellidos deben tener una longitud mínima de 2 caracteres.
+            </mat-error>
+        </mat-form-field>
+        <!-- Correo electronico -->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Correo electrónico</mat-label>
+            <input matInput type="email" [errorStateMatcher]="matcher" formControlName="email" autocomplete="off">
+            <mat-error *ngIf="!form.get('email').valid">
+                Debe ingresar una dirección de correo electrónico válida.
+            </mat-error>
+        </mat-form-field>
+        <!-- Numero telefonico -->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Teléfono</mat-label>
+            <input matInput type="tel" [errorStateMatcher]="matcher" formControlName="telefono" autocomplete="off">
+            <mat-error *ngIf="!form.get('telefono').valid">
+                Debe ingresar una número telefónico válido.
+            </mat-error>
+        </mat-form-field>
+        <!--    Dirección fiscal-->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Código postal</mat-label>
+            <input matInput [errorStateMatcher]="matcher" formControlName="address_zip" autocomplete="off">
+            <mat-error *ngIf="!form.get('address_zip').valid">
+                Debe ingresar código postal válido.
+            </mat-error>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-flat-button mat-dialog-close [disabled]="loading">
+    Cerrar
+  </button>
+    <button mat-flat-button [disabled]="loading || !form.valid" color="primary" (click)="submit()">
+    Aplicar cambios
+  </button>
+</mat-dialog-actions>

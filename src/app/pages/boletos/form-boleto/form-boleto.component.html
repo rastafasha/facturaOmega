@@ -1,0 +1,109 @@
+<mat-progress-bar mode="query" *ngIf="loading"></mat-progress-bar>
+
+<h2 mat-dialog-title>Formulario Boleto</h2>
+
+<mat-dialog-content>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <!-- Fecha del boleto -->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Fecha</mat-label>
+            <input  matInput
+                    [matDatepicker]="dp"
+                    [errorStateMatcher]="matcher"
+                    formControlName="fecha"
+                    autocomplete="off"
+                    cdkFocusInitial>
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp></mat-datepicker>
+            <mat-error *ngIf="!form.get('fecha').valid">
+              La fecha es requerida para la búsqueda
+            </mat-error>
+        </mat-form-field>      
+        <!-- Hora del boleto -->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Hora del boleto</mat-label>
+            <input  matInput
+                    [errorStateMatcher]="matcher"
+                    formControlName="hora"
+                    autocomplete="off">
+            <mat-error *ngIf="!form.get('hora').valid">
+                La hora es requerida
+            </mat-error>
+        </mat-form-field>
+        <!-- Carril del boleto -->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Carril</mat-label>
+            <input  matInput
+                    type="number"
+                    min=1
+                    [errorStateMatcher]="matcher"
+                    formControlName="carril"
+                    autocomplete="off">
+            <mat-error *ngIf="!form.get('carril').valid">
+                El carril es requerido
+            </mat-error>
+        </mat-form-field>
+        <!-- Señal -->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Señal</mat-label>
+            <mat-select formControlName="senal">
+               <mat-option *ngFor="let s of SENALES" [value]="s">
+                   {{ s }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="!form.get('senal').valid">
+                La señal es requerida
+            </mat-error>
+        </mat-form-field>
+        <!-- Tarifa del boleto -->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Tarifa</mat-label>
+            <input  matInput
+                    type="number"
+                    min=1
+                    [errorStateMatcher]="matcher"
+                    formControlName="tarifa"
+                    autocomplete="off">
+            <mat-error *ngIf="!form.get('tarifa').valid">
+                La tarifa es requerida
+            </mat-error>
+        </mat-form-field>
+        <!-- Pago -->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Pago</mat-label>
+            <mat-select formControlName="pago">
+                <mat-option *ngFor="let p of PAGOS" [value]="p.id">
+                    {{ p.nombre }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="!form.get('pago').valid">
+                El pago es requerido
+            </mat-error>
+        </mat-form-field>
+        <!-- Folio -->
+        <mat-form-field appearance="fill" class="cchs-input-full">
+            <mat-label>Folio</mat-label>
+            <input  matInput
+                    [errorStateMatcher]="matcher"
+                    formControlName="folio"
+                    autocomplete="off">
+            <mat-error *ngIf="!form.get('folio').valid">
+                El folio es requerido
+            </mat-error>
+        </mat-form-field>        
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-flat-button
+            mat-dialog-close
+            [disabled]="loading">
+            Cerrar
+    </button>
+    <button mat-flat-button
+            [disabled]="loading || !form.valid"
+            color="primary"
+            (click)="submit()">
+            Aplicar cambios
+    </button>
+</mat-dialog-actions>

@@ -1,0 +1,200 @@
+<mat-progress-bar mode="indeterminate"
+                  *ngIf="loading">
+</mat-progress-bar>
+<h1>Complemento de Pagos 2.0</h1>
+<ng-container>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="searchForm" (ngSubmit)="addInvoice()">
+        <mat-card>
+          <mat-card-content>
+            <mat-hint>Busca una factura para agregar al complemento de pago.</mat-hint>
+            <div class="row mt-2">
+              <div class="col-auto">
+                <mat-form-field appearance="fill">
+                  <mat-label>Serie</mat-label>
+                  <input
+                    matInput
+                    placeholder="CAS"
+                    formControlName="series"
+                    [errorStateMatcher]="errorMatcher"
+                  >
+                </mat-form-field>
+              </div>
+              <div class="col-auto">
+                <mat-form-field appearance="fill">
+                  <mat-label>Folio</mat-label>
+                  <input
+                    matInput
+                    placeholder="1234"
+                    formControlName="folio"
+                    [errorStateMatcher]="errorMatcher"
+                  >
+                </mat-form-field>
+              </div>
+              <div class="col-auto">
+                <button class="ml-2" mat-raised-button [disabled]="searchForm.invalid">Agregar</button>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </form>
+    </div>
+    <div class="col mt-2">
+      <mat-card *ngIf="customer">
+        <mat-card-title>Datos de la factura</mat-card-title>
+        <mat-card-content>
+          <div class="row">
+            <div class="col">
+              RFC: {{customer.tax_id}} <br>
+              Nombre: {{customer.legal_name}} <br>
+              Total de pagos: {{invoiceTotal | currency}}
+            </div>
+            <div class="col">
+              <form [formGroup]="invoiceForm" class="form-fluid mt-2">
+                <select-forma-pago formControlName="payment_form"></select-forma-pago>
+                <mat-form-field>
+                  <mat-label>Fecha del pago</mat-label>
+                  <input
+                    matInput
+                    [matDatepicker]="picker"
+                    formControlName="date"
+                    [errorStateMatcher]="errorMatcher"
+                    [max]="maxDate"
+                  >
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </form>
+            </div>
+          </div>
+        </mat-card-content>
+        <mat-card-actions class="text-right">
+          <button mat-raised-button color="primary" (click)="generatePayment()" [disabled]="invoiceForm.invalid">Generar factura</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+  <mat-card class="mt-2" *ngFor="let invoiceData of invoices">
+    <mat-card-title>
+      {{invoiceData.invoice.series}}{{invoiceData.invoice.folio_number}}
+    </mat-card-title>
+    <mat-card-content>
+      <div class="row">
+        <div class="col-auto">
+          UUID: {{invoiceData.invoice.uuid}} <br>
+          Status: {{invoiceData.invoice | statusFactura}} <br>
+          Total de la factura: {{invoiceData.invoice.total | currency}} <br>
+          Pagos anteriores: <br>
+          <ul>
+            <li *ngFor="let payment of invoiceData.data.payments">
+              {{payment.createdAt | date}} {{payment.folio_number}}: {{payment.amount | currency}}
+            </li>
+          </ul>
+          Último balance: {{invoiceData.data.last_balance | currency}}<br>
+          <hr>
+          Número de pago: {{invoiceData.data.installment}} <br>
+
+          <hr>
+          Restante después del pago actual: {{invoiceData.data.last_balance - invoiceData.data.amount | currency}}
+        </div>
+        <div class="col">
+          <form class="form-fluid">
+            <mat-form-field appearance="fill">
+              <mat-label>Cantidad a saldar</mat-label>
+              <input type="number"
+                     matInput
+                     placeholder="ej. 1200"
+                     name="amount"
+                     min=".01"
+                     required
+                     #amount="ngModel"
+                     [(ngModel)]="invoiceData.data.amount"
+                     (change)="updateInvoiceTotal()">
+              <mat-hint>Ingrese la cantidad a depositar de la factura.</mat-hint>
+              <mat-error *ngIf="amount.invalid">Ingrese un valor mayor a 0</mat-error>
+            </mat-form-field>
+          </form>
+          <div class="text-right mb-3">
+            <button mat-raised-button (click)="addTax(invoiceData)">
+              <mat-icon>add</mat-icon>
+              Agregar impuesto
+            </button>
+          </div>
+          <form class="form-fluid">
+            <div class="row" *ngFor="let tax of invoiceData.data.taxes; index as i">
+              <div class="col-md-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Cantidad</mat-label>
+                  <input matInput
+                         type="number"
+                         placeholder="ej. 35.50"
+                         name="base"
+                         [(ngModel)]="tax.base"
+                         #base="ngModel"
+                         min=".01"
+                         required
+                         (change)="updateInvoiceTotal()">
+                  <mat-error *ngIf="base.invalid">Ingrese un valor mayor a 0</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Tipo de impuesto</mat-label>
+                  <mat-select [(ngModel)]="tax.type" name="type">
+                    <mat-option value="IVA">IVA</mat-option>
+                    <mat-option value="ISR">ISR</mat-option>
+                    <mat-option value="IEPS">IEPS</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Tasa</mat-label>
+                  <input matInput
+                         type="number"
+                         placeholder="ej. 16"
+                         name="rate"
+                         [errorStateMatcher]="errorMatcher"
+                         min=".01"
+                         required
+                         #rate="ngModel"
+                         [(ngModel)]="tax.rate">
+                  <mat-error *ngIf="rate.invalid">Ingrese un valor mayor a 0</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Factor</mat-label>
+                  <mat-select [(ngModel)]="tax.factor" name="factor">
+                    <mat-option value="Tasa">Tasa</mat-option>
+                    <mat-option value="Cuota">Cuota</mat-option>
+                    <mat-option value="Exento">Exento</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Retención o Traslado</mat-label>
+                  <mat-select [(ngModel)]="tax.withholding" name="withholding">
+                    <mat-option [value]="true">Retención</mat-option>
+                    <mat-option [value]="false">Traslado</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-auto">
+                <button mat-raised-button color="warn" size="small" (click)="removeTax(invoiceData,i)"
+                        title="Remover impuesto">
+                  <mat-icon>remove_circle_outline</mat-icon>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions class="text-right">
+      <button mat-raised-button (click)="removeInvoice(invoiceData.invoice.id)" color="warn">Remover</button>
+    </mat-card-actions>
+  </mat-card>
+</ng-container>

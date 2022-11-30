@@ -1,0 +1,77 @@
+<mat-progress-bar mode="query" *ngIf="loading"></mat-progress-bar>
+
+<h1>Usuario</h1>
+    
+<form class="cchs-form" [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>Nombres</mat-label>
+        <input  matInput
+                #inputNombres
+                [errorStateMatcher]="matcher"
+                formControlName="nombres"
+                autocomplete="off"
+                [autofocus]="true"
+                cdkFocusInitial>
+        <mat-error *ngIf="!form.get('nombres').valid">
+            El nombre o nombres debe tener una longitud mínima de 2 caracteres.
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>Apellidos</mat-label>
+        <input  matInput
+                [errorStateMatcher]="matcher"
+                formControlName="apellidos"
+                autocomplete="off">
+        <mat-error *ngIf="!form.get('apellidos').valid">
+            Los apellidos deben tener una longitud mínima de 2 caracteres.
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="cchs-input-full">
+      <mat-label>Correo electrónico</mat-label>
+      <input    matInput
+                [errorStateMatcher]="matcher"
+                formControlName="email"
+                autocomplete="off">
+        <mat-error *ngIf="!form.get('email').valid">
+            Debe ingresar una dirección de correo electrónico válida.
+        </mat-error>
+    </mat-form-field>  
+    <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>Teléfono</mat-label>
+        <input    matInput
+                  type="number"
+                  [errorStateMatcher]="matcher"
+                  formControlName="telefono"
+                  autocomplete="off">
+        <mat-error *ngIf="!form.get('telefono').valid">
+            Debe ingresar una número telefónico válido.
+        </mat-error>
+    </mat-form-field>  
+    <!-- Perfiles de usuario -->
+    <mat-form-field appearance="fill" class="cchs-input-full">
+        <mat-label>Perfil</mat-label>
+        <mat-select formControlName="perfiles" multiple>
+            <mat-option [value]="ADMINISTRADOR">Administrador</mat-option>
+            <mat-option [value]="CAPTURISTA">Capturista</mat-option>
+            <mat-option [value]="CLIENTE">Cliente</mat-option>
+          </mat-select>
+        <mat-error *ngIf="!form.get('perfiles').valid">
+            El perfil es requerido
+        </mat-error>
+    </mat-form-field>  
+
+    <div class="cchs-button-toolbar">
+        <button mat-flat-button
+                [disabled]="loading"
+                color="secondary"
+                routerLink="/{{ sesion.path }}/usuarios">
+                Cancelar
+        </button>        
+        <button mat-flat-button
+                [disabled]="loading || !form.valid"
+                color="primary"
+                (click)="submit()">
+                Aplicar cambios
+        </button>
+    </div>
+</form>

@@ -1,0 +1,12 @@
+<div class="cchs-button-toolbar" *ngIf="totalRegistros > 0">
+    <button mat-button
+            [disabled]="disabled || pagina == 0"
+            (click)="atras()">
+            Anterior
+    </button>
+    <button mat-button
+            [disabled]="disabled || !esSiguienteValido()"
+            (click)="siguiente()">
+            Siguiente
+    </button>
+</div>
